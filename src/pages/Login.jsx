@@ -12,8 +12,8 @@ import {
 import { LockOutlined } from '@mui/icons-material';
 
 export default function Login({ onLogin }) {
-  const [email, setEmail] = useState('demo@picarro.com');
-  const [password, setPassword] = useState('demo123');
+  const [email, setEmail] = useState('abhisek.satapathy007@gmail.com');
+  const [password, setPassword] = useState('Kinnow@2022');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,13 +23,13 @@ export default function Login({ onLogin }) {
     setError('');
 
     // Demo login: case-insensitive email, exact password
-    if (email.trim().toLowerCase() === 'demo@picarro.com' && password === 'demo123') {
+    if (email.trim().toLowerCase() === 'abhisek.satapathy007@gmail.com' && password === 'Kinnow@2022') {
       setTimeout(() => {
         onLogin && onLogin();
         setLoading(false);
       }, 500);
     } else {
-      setError('Invalid credentials. Use demo@picarro.com / demo123');
+      setError('Invalid credentials.');
       setLoading(false);
     }
   };
@@ -101,13 +101,6 @@ export default function Login({ onLogin }) {
                 {error}
               </Alert>
             )}
-            <Alert severity="info" sx={{ mt: 2 }}>
-              <Typography variant="body2">
-                <strong>Demo Credentials:</strong><br />
-                Email: demo@picarro.com<br />
-                Password: demo123
-              </Typography>
-            </Alert>
           </Box>
         </Paper>
       </Box>
