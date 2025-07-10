@@ -1,5 +1,14 @@
 // API Configuration
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const getApiUrl = () => {
+  // In production, if no API URL is set, we'll use a placeholder
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.REACT_APP_API_URL || 'https://your-backend-url.vercel.app/api';
+  }
+  // In development, use localhost
+  return process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+};
+
+export const API_BASE_URL = getApiUrl();
 
 // Environment check
 export const isDevelopment = process.env.NODE_ENV === 'development';

@@ -1,165 +1,148 @@
-# Simulation HCM - Workday-like Human Capital Management Tool
+# HRM Portal - Human Capital Management Tool
 
-A comprehensive Human Capital Management (HCM) application built with React, TypeScript, and Material-UI that mimics the look, feel, and navigation patterns of Workday HCM.
+A comprehensive HRM portal built with React, TypeScript, and Material-UI, designed to simulate enterprise HR management workflows.
 
-## Features
+## 🚀 Live Demo
 
-### 🏠 Dashboard
-- Key HR metrics and KPIs
-- Employee distribution charts
-- Recent activities feed
-- Performance indicators
-- Interactive data visualizations
+The application is deployed on Vercel and includes demo functionality.
 
-### 👥 Employee Management
-- Comprehensive employee database
-- Search and filter functionality
-- Employee profiles and details
-- Department and position management
-- Status tracking (Active, On Leave, Terminated)
+**Demo Credentials:**
+- Email: `demo@picarro.com`
+- Password: `demo123`
 
-### 💰 Payroll Management
-- Pay run creation and processing
-- Salary tracking and management
-- Payroll distribution analysis
-- Monthly payroll trends
-- Error handling and validation
+## 🛠️ Features
 
-### 🏥 Benefits Administration
-- Benefit plan management
-- Enrollment tracking
-- Provider management
-- Cost analysis
-- Coverage distribution
+- **Role-based Access**: Admin, Manager, Employee, and Tech roles
+- **Organization Management**: Department and position management
+- **Jobs & Positions**: Create and manage job positions
+- **Compensation**: Salary and benefits management
+- **Security & Roles**: User permissions and access control
+- **Business Processes**: Workflow management
+- **Reports & Dashboards**: Analytics and reporting
+- **Self Service**: Employee self-service portal
 
-### 📊 Additional Modules
-- **Time Tracking**: Time sheets and attendance
-- **Recruiting**: Job postings and candidate management
-- **Performance**: Reviews and goal management
-- **Learning**: Training and development
-- **Reports**: Analytics and reporting
+## 🏗️ Architecture
 
-## Technology Stack
-
-- **Frontend**: React 18 with TypeScript
-- **UI Framework**: Material-UI (MUI) v5
-- **Charts**: Recharts for data visualization
+- **Frontend**: React 18 + TypeScript + Material-UI
+- **State Management**: React Hooks
 - **Routing**: React Router v6
-- **Styling**: Emotion (CSS-in-JS)
-- **Icons**: Material Icons
+- **Charts**: Recharts
+- **Deployment**: Vercel
 
-## Getting Started
+## 🚀 Deployment
 
 ### Prerequisites
+- Node.js 16+ 
+- npm 8+
 
-- Node.js (v16 or higher)
-- npm or yarn package manager
+### Local Development
 
-### Installation
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd hrmportal
+   ```
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd Simulation
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+3. **Start development server**
+   ```bash
+   npm start
+   ```
 
-3. Start the development server:
-```bash
-npm start
-```
+4. **Access the application**
+   - Open http://localhost:3000
+   - Login with demo credentials
 
-4. Open your browser and navigate to `http://localhost:3000`
+### Production Deployment
 
-### Available Scripts
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
 
-- `npm start` - Runs the app in development mode
-- `npm build` - Builds the app for production
-- `npm test` - Launches the test runner
-- `npm eject` - Ejects from Create React App (not recommended)
+2. **Deploy to Vercel**
+   - Connect your repository to Vercel
+   - Vercel will automatically detect the React app
+   - The build configuration is already set up
 
-## Project Structure
+## 🔧 Configuration
+
+### Environment Variables
+
+The application uses the following environment variables:
+
+- `REACT_APP_API_URL`: Backend API URL (optional for demo)
+
+### API Configuration
+
+The app is configured to work in demo mode without a backend. In production, you can:
+
+1. Set up a backend API
+2. Configure `REACT_APP_API_URL` environment variable
+3. Update API endpoints in `src/config/api.js`
+
+## 🐛 Troubleshooting
+
+### Blank Page Issues
+
+If you see a blank page after deployment:
+
+1. **Check Console Errors**: Open browser developer tools (F12) and check the Console tab
+2. **Verify Authentication**: Make sure you're logged in with demo credentials
+3. **Check Network**: Ensure all static assets are loading properly
+
+### Build Issues
+
+If the build fails:
+
+1. **Clear Cache**: Delete `node_modules` and `package-lock.json`, then run `npm install`
+2. **Check Dependencies**: Ensure all dependencies are properly installed
+3. **Verify Configuration**: Check that all configuration files are present
+
+### API Issues
+
+The application includes fallback data for demo purposes. If you need real API integration:
+
+1. Deploy your backend API
+2. Set the `REACT_APP_API_URL` environment variable
+3. Update the API configuration in `src/config/api.js`
+
+## 📁 Project Structure
 
 ```
 src/
-├── components/
-│   └── Layout/
-│       └── Layout.tsx          # Main layout with navigation
-├── pages/
-│   ├── Dashboard/
-│   │   └── Dashboard.tsx       # Main dashboard with metrics
-│   ├── Employees/
-│   │   └── Employees.tsx       # Employee management
-│   ├── Payroll/
-│   │   └── Payroll.tsx         # Payroll processing
-│   ├── Benefits/
-│   │   └── Benefits.tsx        # Benefits administration
-│   ├── TimeTracking/
-│   │   └── TimeTracking.tsx    # Time and attendance
-│   ├── Recruiting/
-│   │   └── Recruiting.tsx      # Talent acquisition
-│   ├── Performance/
-│   │   └── Performance.tsx     # Performance management
-│   ├── Learning/
-│   │   └── Learning.tsx        # Learning and development
-│   └── Reports/
-│       └── Reports.tsx         # Analytics and reporting
-├── App.tsx                     # Main app component
-├── index.tsx                   # App entry point
-└── index.css                   # Global styles
+├── components/          # Reusable UI components
+├── pages/              # Page components
+├── config/             # Configuration files
+├── App.tsx            # Main application component
+└── index.tsx          # Application entry point
 ```
 
-## Design System
+## 🎨 UI Components
 
-The application follows Workday's design principles:
+- **Material-UI**: Modern, accessible UI components
+- **Responsive Design**: Works on desktop and mobile
+- **Theme Customization**: Consistent branding and styling
+- **Accessibility**: WCAG compliant components
 
-- **Color Scheme**: Primary blue (#0066cc) with supporting colors
-- **Typography**: Roboto font family
-- **Layout**: Responsive design with sidebar navigation
-- **Components**: Material-UI components with custom styling
-- **Navigation**: Left sidebar with main menu items
-- **Cards**: Clean, elevated cards for content organization
+## 🔒 Security
 
-## Key Features
+- **Demo Mode**: No real authentication in demo
+- **Production Ready**: Can be configured with real auth providers
+- **Role-based Access**: Different features for different user roles
 
-### Responsive Design
-- Mobile-friendly interface
-- Adaptive layout for different screen sizes
-- Touch-friendly interactions
+## 📊 Performance
 
-### Data Visualization
-- Interactive charts and graphs
-- Real-time data updates
-- Export capabilities
+- **Code Splitting**: Automatic route-based code splitting
+- **Optimized Build**: Production-optimized bundle
+- **Lazy Loading**: Components load on demand
+- **Caching**: Static assets are cached for performance
 
-### User Experience
-- Intuitive navigation
-- Consistent design patterns
-- Fast loading times
-- Accessibility features
-
-## Customization
-
-### Adding New Modules
-1. Create a new page component in `src/pages/`
-2. Add the route to `App.tsx`
-3. Add navigation item to `Layout.tsx`
-
-### Styling
-- Global styles in `src/index.css`
-- Component-specific styles using Material-UI's `sx` prop
-- Theme customization in `App.tsx`
-
-### Data Management
-- Currently uses mock data
-- Can be easily connected to backend APIs
-- Supports real-time data updates
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -167,14 +150,19 @@ The application follows Workday's design principles:
 4. Test thoroughly
 5. Submit a pull request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License.
+This project is for demonstration purposes.
 
-## Support
+## 🆘 Support
 
-For questions or support, please open an issue in the repository.
+For issues or questions:
+
+1. Check the troubleshooting section above
+2. Review browser console for errors
+3. Verify all configuration files are present
+4. Ensure all dependencies are installed
 
 ---
 
-**Note**: This is a demonstration application built to showcase Workday-like HCM functionality. It uses mock data and is intended for educational and demonstration purposes. 
+**Note**: This is a demo application. For production use, implement proper authentication, backend APIs, and security measures. 

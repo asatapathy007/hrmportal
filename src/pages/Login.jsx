@@ -10,11 +10,10 @@ import {
   Avatar
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
-import { supabase } from '../supabaseClient';
 
 export default function Login({ onLogin }) {
-  const [email, setEmail] = useState('Picarro');
-  const [password, setPassword] = useState('Picarro');
+  const [email, setEmail] = useState('demo@picarro.com');
+  const [password, setPassword] = useState('demo123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,17 +22,17 @@ export default function Login({ onLogin }) {
     setLoading(true);
     setError('');
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) {
-      setError(error.message);
+    // Simple demo login - no external dependencies
+    if (email === 'demo@picarro.com' && password === 'demo123') {
+      // Simulate API call delay
+      setTimeout(() => {
+        onLogin && onLogin();
+        setLoading(false);
+      }, 1000);
     } else {
-      onLogin && onLogin();
+      setError('Invalid credentials. Use demo@picarro.com / demo123');
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -105,6 +104,14 @@ export default function Login({ onLogin }) {
                 {error}
               </Alert>
             )}
+            
+            <Alert severity="info" sx={{ mt: 2 }}>
+              <Typography variant="body2">
+                <strong>Demo Credentials:</strong><br />
+                Email: demo@picarro.com<br />
+                Password: demo123
+              </Typography>
+            </Alert>
           </Box>
         </Paper>
       </Box>
