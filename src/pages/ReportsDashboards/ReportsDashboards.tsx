@@ -25,27 +25,18 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Avatar,
-  Stack,
-  Tabs,
-  Tab,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
   Divider,
-  Alert,
   Badge,
-  LinearProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  FormControlLabel,
-  Checkbox,
-  Switch,
-  Slider,
+  Snackbar,
+  Tabs,
+  Tab,
   FormGroup,
-  Snackbar
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -58,44 +49,16 @@ import {
   Edit as EditIcon,
   Visibility as VisibilityIcon,
   Download as DownloadIcon,
-  Print as PrintIcon,
   Share as ShareIcon,
   Star as StarIcon,
-  Schedule as ScheduleIcon,
-  Notifications as NotificationsIcon,
-  ExpandMore as ExpandMoreIcon,
   FilterList as FilterIcon,
   Search as SearchIcon,
-  Refresh as RefreshIcon,
-  Settings as SettingsIcon,
-  MoreVert as MoreIcon,
-  Person as PersonIcon,
-  Work as WorkIcon,
-  Business as BusinessIcon,
-  LocationOn as LocationIcon,
-  Apartment as DepartmentIcon,
-  Grade as GradeIcon,
-  MonetizationOn as MoneyIcon,
-  Assignment as AssignmentIcon,
-  AccountCircle as AccountIcon,
-  SupervisorAccount as ManagerIcon,
-  WorkOutline as JobIcon,
-  BusinessCenter as OrgIcon,
-  Payment as PaymentIcon,
-  Receipt as ReceiptIcon,
-  CalendarToday as CalendarIcon,
-  School as SchoolIcon,
-  HealthAndSafety as HealthIcon,
-  Security as SecurityIcon,
-  Analytics as AnalyticsIcon,
   TableChart as TableChartIcon,
   ShowChart as ShowChartIcon,
-  InsertChart as InsertChartIcon,
-  PlayArrow as PlayIcon,
-  Pause as PauseIcon,
   Delete as DeleteIcon,
   FileCopy as FileCopyIcon,
-  GetApp as GetAppIcon
+  GetApp as GetAppIcon,
+  MoreVert as MoreIcon
 } from '@mui/icons-material';
 
 interface Report {
@@ -509,7 +472,7 @@ const ReportsDashboards: React.FC = () => {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button variant="outlined" startIcon={<ScheduleIcon />} onClick={handleScheduleReport}>
+          <Button variant="outlined" startIcon={<BarChartIcon />} onClick={handleScheduleReport}>
             Schedule Report
           </Button>
           <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreateReport}>
@@ -562,7 +525,7 @@ const ReportsDashboards: React.FC = () => {
         </Grid>
         <Grid item xs={12} md={3}>
           <Card sx={{ p: 2, textAlign: 'center', cursor: 'pointer' }} onClick={() => setSnackbar({ open: true, message: 'Analytics tools coming soon!' })}>
-            <AnalyticsIcon sx={{ fontSize: 40, color: 'info.main', mb: 1 }} />
+            <BarChartIcon sx={{ fontSize: 40, color: 'info.main', mb: 1 }} />
             <Typography variant="h6">Analytics</Typography>
             <Typography variant="body2" color="text.secondary">
               Advanced analytics tools
@@ -668,7 +631,7 @@ const ReportsDashboards: React.FC = () => {
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <Tooltip title="Run Report">
                             <IconButton size="small" color="primary">
-                              <PlayIcon />
+                              <BarChartIcon />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title="View">
@@ -878,7 +841,7 @@ const ReportsDashboards: React.FC = () => {
                             <EditIcon />
                           </IconButton>
                           <IconButton size="small" color="warning" onClick={() => handlePauseScheduled(row)}>
-                            <PauseIcon />
+                            <BarChartIcon />
                           </IconButton>
                         </Box>
                       </TableCell>
@@ -929,7 +892,7 @@ const ReportsDashboards: React.FC = () => {
                   description: 'Compensation analysis by job level and location'
                 })}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <MoneyIcon color="primary" />
+                    <BarChartIcon color="primary" />
                     <Typography variant="h6">Compensation Report</Typography>
                   </Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

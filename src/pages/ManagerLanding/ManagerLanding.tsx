@@ -13,44 +13,28 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
-  IconButton,
   Drawer,
   Badge,
-  LinearProgress,
 } from '@mui/material';
 import {
   Group,
-  People,
   Assessment,
   Work,
   BarChart,
   Notifications,
   TrendingUp,
-  Warning,
-  CheckCircle,
   Add,
-  MoreVert,
-  CalendarToday,
   Assignment,
   Book,
-  EmojiEvents,
-  SupervisorAccount,
-  Approval,
-  Schedule,
 } from '@mui/icons-material';
 import {
-  BarChart as RechartsBarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
 } from 'recharts';
 
 interface Worklet {
@@ -91,7 +75,7 @@ const ManagerLanding: React.FC = () => {
       id: 2,
       title: 'Approvals',
       description: 'Review and approve requests, time off, expense reports',
-      icon: <Approval />,
+      icon: <Assessment />,
       count: 5,
       status: 'warning',
       action: 'Review Requests',
@@ -127,7 +111,7 @@ const ManagerLanding: React.FC = () => {
       id: 6,
       title: 'Schedule Management',
       description: 'Manage team schedules, approve time off, track attendance',
-      icon: <Schedule />,
+      icon: <Assessment />,
       count: 15,
       status: 'warning',
       action: 'Manage Schedule',
@@ -365,7 +349,7 @@ const ManagerLanding: React.FC = () => {
                       <ListItem key={approval.id} sx={{ px: 0 }}>
                         <ListItemIcon>
                           <Avatar sx={{ width: 24, height: 24, bgcolor: 'warning.main' }}>
-                            <Approval />
+                            <Assessment />
                           </Avatar>
                         </ListItemIcon>
                         <ListItemText

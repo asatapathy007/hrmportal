@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Layout from './components/Layout/Layout';
+import Login from './pages/Login';
 
 // Role-based pages
 import EmployeeLanding from './pages/EmployeeLanding/EmployeeLanding';
@@ -68,11 +69,13 @@ const theme = createTheme({
   },
 });
 
-// Mock user role - in real app this would come from authentication
-const mockUserRole = 'Admin'; // Options: 'Employee', 'Manager', 'Admin', 'Tech'
-
 function App() {
-  const [currentRole] = useState(mockUserRole);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentRole, setCurrentRole] = useState('Admin'); // Default role
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
 
   const getLandingPage = () => {
     switch (currentRole) {
@@ -88,6 +91,16 @@ function App() {
         return <AdminLanding />;
     }
   };
+
+  // If not authenticated, show login page
+  if (!isAuthenticated) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Login onLogin={handleLogin} />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>

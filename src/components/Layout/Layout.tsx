@@ -13,7 +13,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Divider,
 } from '@mui/material';
 import {
   Dashboard,
@@ -26,7 +25,6 @@ import {
   Schedule,
   Settings,
   AccountCircle,
-  Notifications,
   Person,
   Group,
   AdminPanelSettings,
@@ -43,7 +41,6 @@ import {
   Analytics,
   Apps,
   HelpOutline,
-  InfoOutlined,
   GavelOutlined,
   ChevronLeft,
   ChevronRight,
@@ -51,7 +48,6 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import InputBase from '@mui/material/InputBase';
 import { alpha, styled } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
 
 interface LayoutProps {
   children: React.ReactNode;

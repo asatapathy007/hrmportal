@@ -17,40 +17,28 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  TextField,
 } from '@mui/material';
 import {
   Add,
   MoreVert,
-  BarChart,
-  TrendingUp,
-  CheckCircle,
-  Schedule,
-  Error,
-  Download,
-  Upload,
   Visibility,
   Edit,
   Delete,
   FilterList,
   DateRange,
+  Download,
 } from '@mui/icons-material';
 import {
-  BarChart as RechartsBarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
   AreaChart,
   Area,
 } from 'recharts';
@@ -292,7 +280,7 @@ const Reports: React.FC = () => {
             Department Metrics
           </Typography>
           <ResponsiveContainer width="100%" height={300}>
-            <RechartsBarChart data={departmentMetrics}>
+            <BarChart data={departmentMetrics}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="department" />
               <YAxis yAxisId="left" />
@@ -300,7 +288,7 @@ const Reports: React.FC = () => {
               <Tooltip />
               <Bar yAxisId="left" dataKey="headcount" fill="#0066cc" name="Headcount" />
               <Bar yAxisId="right" dataKey="turnover" fill="#ffc107" name="Turnover %" />
-            </RechartsBarChart>
+            </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>

@@ -39,7 +39,7 @@ import {
   Api,
 } from '@mui/icons-material';
 import {
-  BarChart as RechartsBarChart,
+  BarChart,
   Bar,
   XAxis,
   YAxis,

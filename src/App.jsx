@@ -28,10 +28,6 @@ function App() {
     console.log('Login successful');
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
-
   if (loading) {
     return (
       <div style={{ 

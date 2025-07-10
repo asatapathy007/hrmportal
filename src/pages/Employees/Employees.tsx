@@ -46,7 +46,6 @@ import {
   Person,
   Business,
   LocationOn,
-  SupervisorAccount,
 } from '@mui/icons-material';
 import { API_BASE_URL } from '../../config/api';
 
@@ -361,7 +360,7 @@ const Employees: React.FC = () => {
           method: 'DELETE'
         });
         if (!response.ok) {
-          throw 'Failed to delete employee';
+          throw new Error('Failed to delete employee');
         }
         setSnackbar({
           open: true,
@@ -395,7 +394,7 @@ const Employees: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw `Failed to ${isEditMode ? 'update' : 'create'} employee`;
+        throw new Error(`Failed to ${isEditMode ? 'update' : 'create'} employee`);
       }
 
       setSnackbar({

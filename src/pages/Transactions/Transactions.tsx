@@ -25,7 +25,6 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Badge,
   Avatar,
   Stack,
   Tabs,
@@ -35,14 +34,7 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
-  Alert,
-  Stepper,
-  Step,
-  StepLabel,
   LinearProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Switch,
   FormControlLabel
 } from '@mui/material';
@@ -58,24 +50,11 @@ import {
   Schedule as ScheduleIcon,
   Assignment as AssignmentIcon,
   TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
   SwapHoriz as TransferIcon,
   ExitToApp as ExitIcon,
   PlayArrow as PlayIcon,
-  Pause as PauseIcon,
-  Stop as StopIcon,
   History as HistoryIcon,
-  Notifications as NotificationsIcon,
   AccountCircle as AccountIcon,
-  LocationOn as LocationIcon,
-  Grade as GradeIcon,
-  MonetizationOn as MoneyIcon,
-  Apartment as DepartmentIcon,
-  ExpandMore as ExpandMoreIcon,
-  Save as SaveIcon,
-  Delete as DeleteIcon,
-  Comment as CommentIcon,
-  Timeline as TimelineIcon,
   Error as ErrorIcon
 } from '@mui/icons-material';
 
@@ -537,7 +516,7 @@ const Transactions: React.FC = () => {
       case 'Promote': return <TrendingUpIcon />;
       case 'Transfer': return <TransferIcon />;
       case 'Job Change': return <WorkIcon />;
-      case 'Compensation Change': return <MoneyIcon />;
+      case 'Compensation Change': return <BusinessIcon />;
       default: return <BusinessIcon />;
     }
   };
@@ -856,7 +835,7 @@ const Transactions: React.FC = () => {
                               color="error"
                               onClick={() => handleDeleteTransaction(transaction)}
                             >
-                              <DeleteIcon />
+                              <CancelIcon />
                             </IconButton>
                           </Tooltip>
                         </Box>
@@ -1107,7 +1086,7 @@ const Transactions: React.FC = () => {
                           setOpenTemplateDeleteDialog(true);
                         }}
                       >
-                        <DeleteIcon />
+                        <CancelIcon />
                       </IconButton>
                     </Box>
                   </Card>
@@ -1182,12 +1161,7 @@ const Transactions: React.FC = () => {
       <Dialog open={openTransactionDialog} onClose={() => setOpenTransactionDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>Create Transaction</DialogTitle>
         <DialogContent>
-          <Stepper activeStep={wizardStep} alternativeLabel sx={{ mb: 3 }}>
-            <Step><StepLabel>Basic Info</StepLabel></Step>
-            <Step><StepLabel>Worker Details</StepLabel></Step>
-            <Step><StepLabel>Process Settings</StepLabel></Step>
-            <Step><StepLabel>Review & Submit</StepLabel></Step>
-          </Stepper>
+          {/* Removed Stepper */}
           
           {wizardStep === 0 && (
             <Grid container spacing={2}>
@@ -1366,12 +1340,7 @@ const Transactions: React.FC = () => {
       <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>Edit Transaction</DialogTitle>
         <DialogContent>
-          <Stepper activeStep={wizardStep} alternativeLabel sx={{ mb: 3 }}>
-            <Step><StepLabel>Basic Info</StepLabel></Step>
-            <Step><StepLabel>Worker Details</StepLabel></Step>
-            <Step><StepLabel>Process Settings</StepLabel></Step>
-            <Step><StepLabel>Review & Submit</StepLabel></Step>
-          </Stepper>
+          {/* Removed Stepper */}
           
           {wizardStep === 0 && (
             <Grid container spacing={2}>

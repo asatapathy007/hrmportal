@@ -22,19 +22,11 @@ import {
 import {
   Add,
   MoreVert,
-  Schedule,
-  CheckCircle,
-  Warning,
-  Error,
-  Download,
-  Upload,
   Visibility,
   Edit,
   Delete,
-  AccessTime,
-  TrendingUp,
-  PendingActions,
-  Group,
+  Upload,
+  Download,
 } from '@mui/icons-material';
 import {
   BarChart,

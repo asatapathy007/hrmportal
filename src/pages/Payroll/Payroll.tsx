@@ -27,9 +27,7 @@ import {
   Select,
   Alert,
   CircularProgress,
-  Tooltip,
   Snackbar,
-  Avatar,
 } from '@mui/material';
 import {
   Add,
@@ -48,16 +46,8 @@ import {
   Payment,
 } from '@mui/icons-material';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RechartsTooltip,
-  ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
 } from 'recharts';
 
 interface Payroll {
@@ -330,9 +320,9 @@ const Payroll: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
-        throw `Failed to ${isEditMode ? 'update' : 'create'} payroll`;
-      }
+              if (!response.ok) {
+          throw `Failed to ${isEditMode ? 'update' : 'create'} payroll`;
+        }
 
       setSnackbar({
         open: true,
@@ -482,9 +472,7 @@ const Payroll: React.FC = () => {
                   <TableRow key={payroll.id} hover>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Avatar>
-                          <Person />
-                        </Avatar>
+                        <Person />
                         <Box>
                           <Typography variant="subtitle2">
                             {payroll.employee.firstName} {payroll.employee.lastName}

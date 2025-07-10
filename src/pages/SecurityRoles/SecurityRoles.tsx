@@ -40,7 +40,6 @@ import {
 import {
   Add as AddIcon,
   Security as SecurityIcon,
-  Person as PersonIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as VisibilityIcon,
@@ -297,7 +296,7 @@ const SecurityRoles: React.FC = () => {
         method: 'DELETE'
       });
       if (!response.ok) {
-        throw 'Failed to delete security group';
+        throw new Error('Failed to delete security group');
       }
       // Update local state
       setSecurityGroups(prev => prev.filter(group => group.id !== id));
@@ -312,7 +311,7 @@ const SecurityRoles: React.FC = () => {
         method: 'DELETE'
       });
       if (!response.ok) {
-        throw 'Failed to delete security role';
+        throw new Error('Failed to delete security role');
       }
       // Update local state
       setSecurityRoles(prev => prev.filter(role => role.id !== id));

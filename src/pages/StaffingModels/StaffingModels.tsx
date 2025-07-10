@@ -25,41 +25,25 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Switch,
-  FormControlLabel,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Badge,
-  Avatar,
   Stack,
-  Alert,
-  Divider
+  Alert
 } from '@mui/material';
 import {
   Add as AddIcon,
   Work as WorkIcon,
-  Person as PersonIcon,
-  Business as BusinessIcon,
-  Security as SecurityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as VisibilityIcon,
-  ExpandMore as ExpandMoreIcon,
-  Group as GroupIcon,
-  LocationOn as LocationIcon,
-  SupervisorAccount as SupervisorIcon,
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
-  Warning as WarningIcon,
-  Settings as SettingsIcon,
   Assignment as AssignmentIcon,
   People as PeopleIcon,
-  BusinessCenter as BusinessCenterIcon
+  Settings as SettingsIcon,
+  CheckCircle as CheckCircleIcon,
+  Cancel as CancelIcon
 } from '@mui/icons-material';
 
 interface StaffingModel {

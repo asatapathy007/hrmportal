@@ -19,16 +19,10 @@ import {
   InputAdornment,
   Menu,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Tooltip,
-  Chip,
-  Skeleton,
-  Alert,
   Paper,
+  IconButton,
+  Skeleton,
+  Tooltip,
 } from '@mui/material';
 import {
   People,
@@ -39,7 +33,6 @@ import {
   BusinessCenter,
   Analytics,
   Notifications,
-  TrendingUp,
   Schedule,
   Add,
   Work,
@@ -56,7 +49,7 @@ import {
   Timeline,
 } from '@mui/icons-material';
 import {
-  BarChart as RechartsBarChart,
+  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -981,14 +974,14 @@ const AdminLanding: React.FC = () => {
             </Button>
           </Box>
                       <ResponsiveContainer width="100%" height={200}>
-              <RechartsBarChart data={orgChartData}>
+              <BarChart data={orgChartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="department" />
                 <YAxis />
                 <RechartsTooltip />
                 <Bar dataKey="filled" stackId="a" fill="#28a745" name="Filled" />
                 <Bar dataKey="open" stackId="a" fill="#ffc107" name="Open" />
-              </RechartsBarChart>
+              </BarChart>
             </ResponsiveContainer>
         </CardContent>
       </Card>
