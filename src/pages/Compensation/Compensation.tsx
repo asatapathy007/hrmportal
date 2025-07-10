@@ -25,56 +25,35 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Switch,
-  FormControlLabel,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Badge,
-  Avatar,
-  Stack,
   Alert,
   Divider,
+  Snackbar,
   Tabs,
   Tab,
-  Slider,
+  Badge,
+  Stack,
+  Avatar,
   InputAdornment
 } from '@mui/material';
 import {
   Add as AddIcon,
-  Work as WorkIcon,
-  Person as PersonIcon,
-  Business as BusinessIcon,
-  Security as SecurityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as VisibilityIcon,
-  ExpandMore as ExpandMoreIcon,
-  Group as GroupIcon,
-  LocationOn as LocationIcon,
-  SupervisorAccount as SupervisorIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Warning as WarningIcon,
-  Settings as SettingsIcon,
+  Money as MoneyIcon,
+  TrendingUp as TrendingUpIcon,
+  Receipt as ReceiptIcon,
+  MonetizationOn as MonetizationOnIcon,
+  Grade as GradeIcon,
+  Payment as PaymentIcon,
   Assignment as AssignmentIcon,
   People as PeopleIcon,
-  BusinessCenter as BusinessCenterIcon,
-  Category as CategoryIcon,
-  Description as DescriptionIcon,
-  Grade as GradeIcon,
-  Schedule as ScheduleIcon,
-  AttachMoney as MoneyIcon,
-  TrendingUp as TrendingUpIcon,
-  AccountBalance as AccountBalanceIcon,
-  Payment as PaymentIcon,
-  Receipt as ReceiptIcon,
-  MonetizationOn as MonetizationOnIcon
+  Person as PersonIcon
 } from '@mui/icons-material';
+import { API_BASE_URL } from '../../config/api';
 
 interface CompensationGrade {
   id: string;
@@ -121,8 +100,6 @@ interface WorkerCompensation {
   effectiveDate: string;
   status: 'Active' | 'Pending' | 'Inactive';
 }
-
-const API_BASE_URL = 'http://localhost:3001/api';
 
 const Compensation: React.FC = () => {
   const [openGradeDialog, setOpenGradeDialog] = useState(false);

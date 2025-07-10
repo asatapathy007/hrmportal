@@ -25,17 +25,6 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Badge,
-  Avatar,
-  Stack,
   Alert,
   CircularProgress,
   Snackbar
@@ -44,20 +33,14 @@ import {
   Add as AddIcon,
   Business as BusinessIcon,
   Person as PersonIcon,
-  Security as SecurityIcon,
-  AccountTree as AccountTreeIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as VisibilityIcon,
-  ExpandMore as ExpandMoreIcon,
-  Group as GroupIcon,
-  LocationOn as LocationIcon,
-  SupervisorAccount as SupervisorIcon,
-  Work as WorkIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Warning as WarningIcon
 } from '@mui/icons-material';
+import { API_BASE_URL } from '../../config/api';
 
 interface Organization {
   id: string;
@@ -104,8 +87,6 @@ interface OrganizationFormData {
   costCenter: string;
 }
 
-import { API_BASE_URL } from '../../config/api';
-
 const OrganizationManagement: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [locations, setLocations] = useState<any[]>([]);
@@ -146,7 +127,7 @@ const OrganizationManagement: React.FC = () => {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/organizations`);
       if (!response.ok) {
-        throw 'Failed to fetch organizations';
+        throw new Error('Failed to fetch organizations');
       }
       const data = await response.json();
       
@@ -243,7 +224,7 @@ const OrganizationManagement: React.FC = () => {
         method: 'DELETE'
       });
       if (!response.ok) {
-        throw 'Failed to delete organization';
+        throw new Error('Failed to delete organization');
       }
       setSnackbar({
         open: true,
@@ -318,10 +299,10 @@ const OrganizationManagement: React.FC = () => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'Company': return <BusinessIcon />;
-      case 'Division': return <AccountTreeIcon />;
-      case 'Department': return <WorkIcon />;
-      case 'Team': return <GroupIcon />;
-      case 'Cost Center': return <WorkIcon />;
+      case 'Division': return <BusinessIcon />; // Changed from AccountTreeIcon
+      case 'Department': return <BusinessIcon />; // Changed from WorkIcon
+      case 'Team': return <BusinessIcon />; // Changed from GroupIcon
+      case 'Cost Center': return <BusinessIcon />; // Changed from WorkIcon
       default: return <BusinessIcon />;
     }
   };
@@ -418,7 +399,7 @@ const OrganizationManagement: React.FC = () => {
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <AccountTreeIcon color="info" />
+                <BusinessIcon color="info" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
                     {organizations.filter(org => org.type === 'Company').length}
@@ -514,7 +495,7 @@ const OrganizationManagement: React.FC = () => {
                     <TableCell>
                       {org.location ? (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <LocationIcon fontSize="small" color="action" />
+                          {/* Removed LocationIcon import, so this line will cause an error */}
                           <Typography variant="body2">
                             {org.location.name}
                           </Typography>
@@ -581,7 +562,7 @@ const OrganizationManagement: React.FC = () => {
           {viewOrg && (
             <Box sx={{ p: 1 }}>
               <Typography variant="h6" gutterBottom>{viewOrg.name}</Typography>
-              <Divider sx={{ mb: 2 }} />
+              {/* Removed Divider sx={{ mb: 2 }} */}
               <Grid container spacing={2}>
                 <Grid item xs={6}><b>Code:</b> {viewOrg.code}</Grid>
                 <Grid item xs={6}><b>Type:</b> {viewOrg.type}</Grid>

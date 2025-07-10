@@ -42,6 +42,8 @@ import {
   Cancel as CancelIcon,
 } from '@mui/icons-material';
 
+import { API_BASE_URL } from '../../config/api';
+
 interface Position {
   id: string;
   positionId: string;
@@ -89,8 +91,6 @@ interface PositionFormData {
   standardHours: number;
   compensationGradeId: string;
 }
-
-import { API_BASE_URL } from '../../config/api';
 
 const JobsPositions: React.FC = () => {
   const [positions, setPositions] = useState<Position[]>([]);

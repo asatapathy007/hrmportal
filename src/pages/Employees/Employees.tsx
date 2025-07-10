@@ -36,7 +36,6 @@ import {
 } from '@mui/material';
 import {
   Search,
-  FilterList,
   Add,
   MoreVert,
   Edit,
@@ -45,13 +44,11 @@ import {
   Download,
   Upload,
   Person,
-  Email,
-  Work,
   Business,
   LocationOn,
-  CalendarToday,
   SupervisorAccount,
 } from '@mui/icons-material';
+import { API_BASE_URL } from '../../config/api';
 
 interface Employee {
   id: string;
@@ -132,8 +129,6 @@ interface EmployeeFormData {
   isActive: boolean;
 }
 
-const API_BASE_URL = 'http://localhost:3001/api';
-
 const Employees: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [positions, setPositions] = useState<any[]>([]);
@@ -198,7 +193,7 @@ const Employees: React.FC = () => {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/employees`);
       if (!response.ok) {
-        throw 'Failed to fetch employees';
+        throw new Error('Failed to fetch employees');
       }
       const data = await response.json();
       setEmployees(data);
