@@ -132,7 +132,7 @@ const JobsPositions: React.FC = () => {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/positions`);
       if (!response.ok) {
-        throw 'Failed to fetch positions';
+        throw new Error('Failed to fetch positions');
       }
       const data = await response.json();
       setPositions(data);
@@ -239,7 +239,7 @@ const JobsPositions: React.FC = () => {
         method: 'DELETE'
       });
       if (!response.ok) {
-        throw 'Failed to delete position';
+        throw new Error('Failed to delete position');
       }
       setSnackbar({
         open: true,
@@ -271,7 +271,7 @@ const JobsPositions: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw `Failed to ${isEditMode ? 'update' : 'create'} position`;
+        throw new Error(`Failed to ${isEditMode ? 'update' : 'create'} position`);
       }
 
       setSnackbar({
