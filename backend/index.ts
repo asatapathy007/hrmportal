@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-app-name.vercel.app', 'https://hrmportal.vercel.app'] 
+    ? ['https://your-app-name.vercel.app', 'https://hrmportal.vercel.app', 'https://hrmportal-frontend.vercel.app'] 
     : ['http://localhost:3000'],
   credentials: true
 }));
