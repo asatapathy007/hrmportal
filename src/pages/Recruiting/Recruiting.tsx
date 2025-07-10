@@ -18,33 +18,27 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  LinearProgress,
 } from '@mui/material';
 import {
   Add,
   MoreVert,
-  Work,
-  Person,
-  CheckCircle,
-  Schedule,
-  Error,
-  Download,
-  Upload,
   Visibility,
   Edit,
   Delete,
+  Upload,
+  Download,
 } from '@mui/icons-material';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
 } from 'recharts';
 
 interface JobPosting {
@@ -69,8 +63,6 @@ interface Candidate {
 }
 
 const Recruiting: React.FC = () => {
-  const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
-  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const jobPostings: JobPosting[] = [
@@ -175,19 +167,10 @@ const Recruiting: React.FC = () => {
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, item: any) => {
     setAnchorEl(event.currentTarget);
-    if ('department' in item) {
-      setSelectedJob(item);
-      setSelectedCandidate(null);
-    } else {
-      setSelectedCandidate(item);
-      setSelectedJob(null);
-    }
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedJob(null);
-    setSelectedCandidate(null);
   };
 
   return (

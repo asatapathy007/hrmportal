@@ -42,7 +42,6 @@ import {
   Logout,
   Close,
   KeyboardArrowDown,
-  KeyboardArrowUp,
   Person,
   WorkOutline,
   Approval,
@@ -87,7 +86,7 @@ interface Notification {
 
 const AdminLanding: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedWorklet, setSelectedWorklet] = useState<Worklet | null>(null);
+  const [selectedWorklet] = useState<Worklet | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   
   // Header state
@@ -99,7 +98,7 @@ const AdminLanding: React.FC = () => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
   
   // Loading states
-  const [metricsLoading, setMetricsLoading] = useState(false);
+
 
   const worklets: Worklet[] = [
     {
@@ -708,7 +707,7 @@ const AdminLanding: React.FC = () => {
                   </Avatar>
                   <Box>
                     <Typography variant="h4" component="div" fontWeight="bold">
-                      {metricsLoading ? <Skeleton width={60} /> : metric.value}
+                      {metric.value}
                     </Typography>
                     <Typography color="text.secondary" variant="body2">
                       {metric.name}

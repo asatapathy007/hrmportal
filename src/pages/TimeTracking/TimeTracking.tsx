@@ -51,7 +51,6 @@ interface TimeEntry {
 }
 
 const TimeTracking: React.FC = () => {
-  const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const timeEntries: TimeEntry[] = [
@@ -123,12 +122,10 @@ const TimeTracking: React.FC = () => {
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, entry: TimeEntry) => {
     setAnchorEl(event.currentTarget);
-    setSelectedEntry(entry);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedEntry(null);
   };
 
   return (

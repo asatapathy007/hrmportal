@@ -46,8 +46,6 @@ import {
   ChevronRight,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import InputBase from '@mui/material/InputBase';
-import { alpha, styled } from '@mui/material/styles';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -58,19 +56,14 @@ const drawerWidth = 280;
 
 const Layout: React.FC<LayoutProps> = ({ children, currentRole = 'Admin' }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [appsAnchorEl, setAppsAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
 
   // Debounce search input
   useEffect(() => {
@@ -103,91 +96,22 @@ const Layout: React.FC<LayoutProps> = ({ children, currentRole = 'Admin' }) => {
   const suggestions = getSuggestions(debouncedQuery);
   const flatSuggestions = suggestions.flatMap(g => g.items);
 
-  // Handle search input
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setShowSearchDropdown(true);
-    setHighlightedIndex(-1);
-  };
-
   // Handle suggestion click
   const handleSuggestionClick = (item: any) => {
     setSearchQuery('');
     setShowSearchDropdown(false);
     setHighlightedIndex(-1);
-    setRecentSearches(prev => [item.label, ...prev.filter(q => q !== item.label)].slice(0, 8));
     // In real app, use navigate(item.path)
     alert(`Navigate to ${item.type}: ${item.label}`);
   };
 
-  // Handle search submit (Enter)
-  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (showSearchDropdown && highlightedIndex >= 0 && flatSuggestions.length > 0) {
-        handleSuggestionClick(flatSuggestions[highlightedIndex]);
-      } else if (debouncedQuery.trim()) {
-        setRecentSearches(prev => [debouncedQuery, ...prev.filter(q => q !== debouncedQuery)].slice(0, 8));
-        setShowSearchDropdown(false);
-        setHighlightedIndex(-1);
-        alert(`Search for: ${debouncedQuery}`);
-      }
-    } else if (e.key === 'ArrowDown') {
-      setShowSearchDropdown(true);
-      setHighlightedIndex(i => Math.min(i + 1, flatSuggestions.length - 1));
-    } else if (e.key === 'ArrowUp') {
-      setShowSearchDropdown(true);
-      setHighlightedIndex(i => Math.max(i - 1, 0));
-    } else if (e.key === 'Escape') {
-      setShowSearchDropdown(false);
-      setHighlightedIndex(-1);
-    }
-  };
 
-  // Handle focus/blur
-  const handleSearchFocus = () => setShowSearchDropdown(true);
-  const handleSearchBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    // Only close if not clicking inside dropdown
-    setTimeout(() => {
-      if (!dropdownRef.current?.contains(document.activeElement)) {
-        setShowSearchDropdown(false);
-        setHighlightedIndex(-1);
-      }
-    }, 120);
-  };
-
-  // Handle recent search click
-  const handleRecentClick = (query: string) => {
-    setSearchQuery(query);
-    setShowSearchDropdown(true);
-    setHighlightedIndex(-1);
-    searchInputRef.current?.focus();
-  };
-
-  // Handle clear
-  const handleClearSearch = () => {
-    setSearchQuery('');
-    setShowSearchDropdown(false);
-    setHighlightedIndex(-1);
-    searchInputRef.current?.focus();
-  };
 
   // Keyboard navigation for dropdown
   useEffect(() => {
     if (!showSearchDropdown) setHighlightedIndex(-1);
     else if (highlightedIndex >= flatSuggestions.length) setHighlightedIndex(flatSuggestions.length - 1);
   }, [showSearchDropdown, flatSuggestions.length, highlightedIndex]);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleAppsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAppsAnchorEl(event.currentTarget);
@@ -267,10 +191,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentRole = 'Admin' }) => {
     }
   }
 
-  const getPageTitle = () => {
-    const currentItem = navigationItems.find(item => item.path === location.pathname);
-    return currentItem ? currentItem.text : 'Picarro HCM';
-  };
+
 
   const drawer = (
     <Box>
@@ -327,45 +248,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentRole = 'Admin' }) => {
   );
 
   const picarroBlue = '#0073e6';
-
-  const SearchBarContainer = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(picarroBlue, 0.08),
-    '&:hover': {
-      backgroundColor: alpha(picarroBlue, 0.15),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  }));
-
-  const SearchBarIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    fontFamily: 'Source Sans Pro, sans-serif',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '32ch',
-      },
-    },
-  }));
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>

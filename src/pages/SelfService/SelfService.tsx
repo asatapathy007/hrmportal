@@ -34,54 +34,34 @@ import {
   ListItemText,
   ListItemIcon,
   ListItemAvatar,
-  Divider,
-  Alert,
-  Badge,
-  LinearProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  FormControlLabel,
-  Checkbox,
-  Switch
+  LinearProgress
 } from '@mui/material';
 import {
   Person as PersonIcon,
   Work as WorkIcon,
-  Business as BusinessIcon,
   LocationOn as LocationIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
   Edit as EditIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
-  CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
   Info as InfoIcon,
-  Assignment as AssignmentIcon,
   SupervisorAccount as ManagerIcon,
   People as PeopleIcon,
-  Schedule as ScheduleIcon,
-  Payment as PaymentIcon,
-  Receipt as ReceiptIcon,
-  MonetizationOn as MoneyIcon,
-  Notifications as NotificationsIcon,
-  ExpandMore as ExpandMoreIcon,
-  Add as AddIcon,
-  Visibility as VisibilityIcon,
-  Download as DownloadIcon,
-  Print as PrintIcon,
-  Share as ShareIcon,
-  Star as StarIcon,
-  TrendingUp as TrendingIcon,
   CalendarToday as CalendarIcon,
   AccountCircle as AccountIcon,
   Home as HomeIcon,
-  School as SchoolIcon,
   HealthAndSafety as HealthIcon,
   Security as SecurityIcon,
   Help as HelpIcon,
-  MoreVert as MoreIcon
+  MoreVert as MoreIcon,
+  Visibility as VisibilityIcon,
+  Download as DownloadIcon,
+  Print as PrintIcon,
+  TrendingUp as TrendingIcon,
+  Notifications as NotificationsIcon,
+  Payment as PaymentIcon,
+  Add as AddIcon
 } from '@mui/icons-material';
 
 interface EmployeeInfo {
@@ -137,7 +117,7 @@ const SelfService: React.FC = () => {
   const [openTimeOffDialog, setOpenTimeOffDialog] = useState(false);
   const [openTeamDialog, setOpenTeamDialog] = useState(false);
 
-  const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo>({
+  const employeeInfo: EmployeeInfo = {
     id: 'EMP001',
     name: 'John Doe',
     jobTitle: 'Software Engineer',
@@ -150,9 +130,9 @@ const SelfService: React.FC = () => {
     emergencyContact: 'Jane Doe (Spouse) - +1 (555) 987-6543',
     startDate: '2023-01-15',
     status: 'Active'
-  });
+  };
 
-  const [payrollHistory, setPayrollHistory] = useState<PayrollInfo[]>([
+  const payrollHistory: PayrollInfo[] = [
     {
       id: '1',
       period: 'January 2024',
@@ -180,9 +160,9 @@ const SelfService: React.FC = () => {
       taxes: 500,
       status: 'Paid'
     }
-  ]);
+  ];
 
-  const [timeOffRequests, setTimeOffRequests] = useState<TimeOffRequest[]>([
+  const timeOffRequests: TimeOffRequest[] = [
     {
       id: '1',
       type: 'Vacation',
@@ -203,9 +183,9 @@ const SelfService: React.FC = () => {
       manager: 'Sarah Johnson',
       reason: 'Not feeling well'
     }
-  ]);
+  ];
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+  const teamMembers: TeamMember[] = [
     {
       id: '1',
       name: 'Mike Chen',
@@ -236,7 +216,7 @@ const SelfService: React.FC = () => {
       performance: 'Meets',
       lastReview: '2023-12-05'
     }
-  ]);
+  ];
 
   const handleEditInfo = () => {
     setOpenEditDialog(true);

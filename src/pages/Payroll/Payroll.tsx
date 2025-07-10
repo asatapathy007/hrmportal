@@ -39,16 +39,12 @@ import {
   PlayArrow,
   Pause,
   CheckCircle,
-  Error,
+  Error as ErrorIcon,
   Person,
   MonetizationOn,
   Receipt,
   Payment,
 } from '@mui/icons-material';
-import {
-  PieChart,
-  Pie,
-} from 'recharts';
 
 interface Payroll {
   id: string;
@@ -102,7 +98,7 @@ interface Employee {
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
-const Payroll: React.FC = () => {
+const PayrollComponent: React.FC = () => {
   const [payrolls, setPayrolls] = useState<Payroll[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -132,9 +128,6 @@ const Payroll: React.FC = () => {
     notes: '',
     status: 'Paid'
   });
-
-  const statuses = ['Paid', 'Pending', 'Processing', 'Failed'];
-  const paymentMethods = ['Direct Deposit', 'Check', 'Cash'];
 
   // Fetch payrolls and employees from API
   const fetchPayrolls = async () => {
@@ -174,22 +167,6 @@ const Payroll: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  const payrollData = [
-    { month: 'Jul', amount: 2200000 },
-    { month: 'Aug', amount: 2250000 },
-    { month: 'Sep', amount: 2280000 },
-    { month: 'Oct', amount: 2320000 },
-    { month: 'Nov', amount: 2380000 },
-    { month: 'Dec', amount: 2400000 },
-  ];
-
-  const distributionData = [
-    { name: 'Base Salary', value: 1800000, color: '#0066cc' },
-    { name: 'Bonuses', value: 300000, color: '#28a745' },
-    { name: 'Overtime', value: 150000, color: '#ffc107' },
-    { name: 'Benefits', value: 150000, color: '#dc3545' },
-  ];
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Paid':
@@ -214,7 +191,7 @@ const Payroll: React.FC = () => {
       case 'Pending':
         return <Pause fontSize="small" />;
       case 'Failed':
-        return <Error fontSize="small" />;
+        return <ErrorIcon fontSize="small" />;
       default:
         return <CheckCircle fontSize="small" />;
     }
@@ -287,7 +264,7 @@ const Payroll: React.FC = () => {
           method: 'DELETE'
         });
         if (!response.ok) {
-          throw 'Failed to delete payroll';
+          throw new Error('Failed to delete payroll');
         }
         setSnackbar({
           open: true,
@@ -298,7 +275,7 @@ const Payroll: React.FC = () => {
       } catch (err) {
         setSnackbar({
           open: true,
-          message: typeof err === 'string' ? err : 'Failed to delete payroll',
+          message: err instanceof Error ? err.message : 'Failed to delete payroll',
           severity: 'error'
         });
       }
@@ -321,7 +298,7 @@ const Payroll: React.FC = () => {
       });
 
               if (!response.ok) {
-          throw `Failed to ${isEditMode ? 'update' : 'create'} payroll`;
+          throw new Error(`Failed to ${isEditMode ? 'update' : 'create'} payroll`);
         }
 
       setSnackbar({
@@ -335,7 +312,7 @@ const Payroll: React.FC = () => {
     } catch (err) {
       setSnackbar({
         open: true,
-        message: typeof err === 'string' ? err : `Failed to ${isEditMode ? 'update' : 'create'} payroll`,
+        message: err instanceof Error ? err.message : `Failed to ${isEditMode ? 'update' : 'create'} payroll`,
         severity: 'error'
       });
     }
@@ -667,7 +644,7 @@ const Payroll: React.FC = () => {
                   label="Payment Method"
                   required
                 >
-                  {paymentMethods.map((method) => (
+                  {['Direct Deposit', 'Check', 'Cash'].map((method) => (
                     <MenuItem key={method} value={method}>
                       {method}
                     </MenuItem>
@@ -752,4 +729,4 @@ const Payroll: React.FC = () => {
   );
 };
 
-export default Payroll; 
+export default PayrollComponent; 

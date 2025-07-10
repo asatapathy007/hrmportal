@@ -27,8 +27,6 @@ import {
   Assessment,
   TrendingUp,
   CheckCircle,
-  Schedule,
-  Error,
   Download,
   Upload,
   Visibility,
@@ -74,8 +72,6 @@ interface Goal {
 }
 
 const Performance: React.FC = () => {
-  const [selectedReview, setSelectedReview] = useState<PerformanceReview | null>(null);
-  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const performanceReviews: PerformanceReview[] = [
@@ -184,18 +180,18 @@ const Performance: React.FC = () => {
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, item: any) => {
     setAnchorEl(event.currentTarget);
     if ('period' in item) {
-      setSelectedReview(item);
-      setSelectedGoal(null);
+      // setSelectedReview(item); // Removed
+      // setSelectedGoal(null); // Removed
     } else {
-      setSelectedGoal(item);
-      setSelectedReview(null);
+      // setSelectedGoal(item); // Removed
+      // setSelectedReview(null); // Removed
     }
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedReview(null);
-    setSelectedGoal(null);
+    // setSelectedReview(null); // Removed
+    // setSelectedGoal(null); // Removed
   };
 
   return (

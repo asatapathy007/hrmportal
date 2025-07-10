@@ -48,7 +48,6 @@ import {
   TrendingDown as TrendingDownIcon,
   Edit as EditIcon,
   Visibility as VisibilityIcon,
-  Download as DownloadIcon,
   Share as ShareIcon,
   Star as StarIcon,
   FilterList as FilterIcon,

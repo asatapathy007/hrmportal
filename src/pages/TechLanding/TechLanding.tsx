@@ -13,13 +13,10 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
-  IconButton,
   Drawer,
   Badge,
-  LinearProgress,
 } from '@mui/material';
 import {
-  Build,
   Settings,
   AdminPanelSettings,
   Analytics,
@@ -28,19 +25,13 @@ import {
   Warning,
   CheckCircle,
   Add,
-  MoreVert,
   Code,
   Storage,
   Security,
   IntegrationInstructions,
   BugReport,
-  SystemUpdate,
-  DataUsage,
-  Api,
 } from '@mui/icons-material';
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -48,9 +39,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
 } from 'recharts';
 
 interface Worklet {

@@ -55,7 +55,6 @@ interface Report {
 }
 
 const Reports: React.FC = () => {
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const reports: Report[] = [
@@ -130,12 +129,10 @@ const Reports: React.FC = () => {
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, report: Report) => {
     setAnchorEl(event.currentTarget);
-    setSelectedReport(report);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedReport(null);
   };
 
   return (

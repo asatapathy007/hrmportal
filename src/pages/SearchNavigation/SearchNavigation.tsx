@@ -24,50 +24,30 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  ListItemAvatar,
-  Divider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
   FormGroup,
   FormControlLabel,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Badge,
   Drawer,
-  AppBar,
-  Toolbar
+  Checkbox
 } from '@mui/material';
 import {
-  Search as SearchIcon,
-  Person as PersonIcon,
-  Work as WorkIcon,
-  Business as BusinessIcon,
-  LocationOn as LocationIcon,
-  Apartment as DepartmentIcon,
-  Grade as GradeIcon,
-  MonetizationOn as MoneyIcon,
-  FilterList as FilterIcon,
+  Visibility as VisibilityIcon,
+  MoreVert as MoreIcon,
+  ExpandMore as ExpandMoreIcon,
+  Edit as EditIcon,
   Clear as ClearIcon,
+  FilterList as FilterIcon,
   Star as StarIcon,
   History as HistoryIcon,
   TrendingUp as TrendingIcon,
   Assignment as AssignmentIcon,
-  AccountCircle as AccountIcon,
-  SupervisorAccount as ManagerIcon,
+  Work as WorkIcon,
+  Business as BusinessIcon,
+  Person as PersonIcon,
   WorkOutline as JobIcon,
-  BusinessCenter as OrgIcon,
-  Payment as PaymentIcon,
-  Schedule as ScheduleIcon,
-  Notifications as NotificationsIcon,
-  ExpandMore as ExpandMoreIcon,
-  Add as AddIcon,
-  Edit as EditIcon,
-  Visibility as VisibilityIcon,
-  MoreVert as MoreIcon
+  Search as SearchIcon
 } from '@mui/icons-material';
 
 interface SearchResult {
@@ -98,7 +78,8 @@ const SearchNavigation: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const [mockResults, setMockResults] = useState<SearchResult[]>([
+  // Mock data for search results
+  const mockResults: SearchResult[] = [
     {
       id: '1',
       type: 'Worker',
@@ -161,7 +142,7 @@ const SearchNavigation: React.FC = () => {
       relevance: 75,
       lastModified: '2024-01-12'
     }
-  ]);
+  ];
 
   const filters: SearchFilter[] = [
     {
@@ -213,7 +194,7 @@ const SearchNavigation: React.FC = () => {
       case 'Job': return <WorkIcon />;
       case 'Organization': return <BusinessIcon />;
       case 'Position': return <AssignmentIcon />;
-      case 'Compensation': return <MoneyIcon />;
+      case 'Compensation': return <WorkIcon />; // Changed from MoneyIcon to WorkIcon as MoneyIcon was removed
       default: return <BusinessIcon />;
     }
   };

@@ -103,8 +103,6 @@ const SecurityRoles: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [viewGroup, setViewGroup] = useState<SecurityGroup | null>(null);
   const [viewRole, setViewRole] = useState<SecurityRole | null>(null);
-  const [editGroup, setEditGroup] = useState<SecurityGroup | null>(null);
-  const [editRole, setEditRole] = useState<SecurityRole | null>(null);
 
   const [securityGroups, setSecurityGroups] = useState<SecurityGroup[]>([
     { id: '1', name: 'HR Business Partners', type: 'Job-based', description: 'Security group for HR Business Partners', status: 'Active', userCount: 12, permissions: ['View Employee Data', 'Edit Employee Data', 'View Compensation'] },
@@ -166,7 +164,6 @@ const SecurityRoles: React.FC = () => {
   const [permissionFilter, setPermissionFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [selectedPermission, setSelectedPermission] = useState<PermissionMatrix | null>(null);
   const [permissionDetailsModal, setPermissionDetailsModal] = useState<PermissionMatrix | null>(null);
 
   // Wizard state for create/edit Security Group
@@ -280,14 +277,6 @@ const SecurityRoles: React.FC = () => {
 
   const handleCreateRole = () => {
     setOpenRoleDialog(true);
-  };
-
-  const handleEditGroup = (group: SecurityGroup) => {
-    setEditGroup(group);
-  };
-
-  const handleEditRole = (role: SecurityRole) => {
-    setEditRole(role);
   };
 
   const handleDeleteGroup = async (id: string) => {

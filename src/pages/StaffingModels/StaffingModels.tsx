@@ -72,17 +72,25 @@ interface Position {
   location: string;
 }
 
-const API_BASE_URL = 'http://localhost:3001/api';
-
 const StaffingModels: React.FC = () => {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openPositionDialog, setOpenPositionDialog] = useState(false);
   const [openConfigDialog, setOpenConfigDialog] = useState(false);
   const [openViewPositionsDialog, setOpenViewPositionsDialog] = useState(false);
   const [selectedModel, setSelectedModel] = useState<StaffingModel | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
   const [viewModel, setViewModel] = useState<StaffingModel | null>(null);
-  const [editModel, setEditModel] = useState<StaffingModel | null>(null);
+  const [editDialog, setEditDialog] = useState<null | {
+    id: string;
+    name: string;
+    type: StaffingModel['type'];
+    organization: string;
+    description: string;
+    hiringRestrictions: string[];
+    jobFamilies: string[];
+    locations: string[];
+  }>(null);
+  // Delete dialog state
+  const [deleteDialogId, setDeleteDialogId] = useState<string | null>(null);
 
   // Mock data
   const [staffingModels, setStaffingModels] = useState<StaffingModel[]>([
@@ -193,19 +201,66 @@ const StaffingModels: React.FC = () => {
     locations: string[];
   }>(null);
 
-  // Edit dialog state
-  const [editDialog, setEditDialog] = useState<null | {
-    id: string;
-    name: string;
-    type: StaffingModel['type'];
-    organization: string;
-    description: string;
-    hiringRestrictions: string[];
-    jobFamilies: string[];
-    locations: string[];
-  }>(null);
-  // Delete dialog state
-  const [deleteDialogId, setDeleteDialogId] = useState<string | null>(null);
+  // Toggle chips in config dialog
+  const toggleEditChip = (field: 'hiringRestrictions' | 'jobFamilies' | 'locations', value: string) => {
+    if (!editConfig) return;
+    setEditConfig((prev) => {
+      if (!prev) return prev;
+      const arr = prev[field];
+      return {
+        ...prev,
+        [field]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
+      };
+    });
+  };
+
+  // Toggle chips in edit dialog
+  const toggleEditDialogChip = (field: 'hiringRestrictions' | 'jobFamilies' | 'locations', value: string) => {
+    if (!editDialog) return;
+    setEditDialog((prev) => {
+      if (!prev) return prev;
+      const arr = prev[field];
+      return {
+        ...prev,
+        [field]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
+      };
+    });
+  };
+
+  // Add model handler
+  const handleCreateModelSubmit = () => {
+    if (!createModelForm.name || !createModelForm.organization) return;
+    setStaffingModels((prev) => [
+      ...prev,
+      {
+        id: (prev.length + 1).toString(),
+        name: createModelForm.name,
+        type: createModelForm.type as any,
+        organization: createModelForm.organization,
+        description: createModelForm.description,
+        status: 'Active',
+        positions: 0,
+        filledPositions: 0,
+        hiringRestrictions: createModelForm.hiringRestrictions,
+        jobFamilies: createModelForm.jobFamilies,
+        locations: createModelForm.locations,
+      },
+    ]);
+    setOpenCreateDialog(false);
+    setCreateModelForm({
+      name: '',
+      type: modelTypes[0],
+      organization: '',
+      description: '',
+      hiringRestrictions: [],
+      jobFamilies: [],
+      locations: [],
+    });
+  };
 
   const handleCreateModel = () => {
     setOpenCreateDialog(true);
@@ -322,26 +377,6 @@ const StaffingModels: React.FC = () => {
     setEditConfig(null);
   };
 
-  const handleUpdateModelType = (modelId: string, newType: 'Position Management' | 'Job Management' | 'Headcount Management') => {
-    setStaffingModels(prev => 
-      prev.map(model => 
-        model.id === modelId 
-          ? { ...model, type: newType }
-          : model
-      )
-    );
-  };
-
-  const handleUpdateHiringRestrictions = (modelId: string, restrictions: string[]) => {
-    setStaffingModels(prev => 
-      prev.map(model => 
-        model.id === modelId 
-          ? { ...model, hiringRestrictions: restrictions }
-          : model
-      )
-    );
-  };
-
   const getModelTypeIcon = (type: string) => {
     switch (type) {
       case 'Position Management': return <AssignmentIcon />;
@@ -383,67 +418,6 @@ const StaffingModels: React.FC = () => {
           ? arr.filter((v) => v !== value)
           : [...arr, value],
       };
-    });
-  };
-
-  // Toggle chips in config dialog
-  const toggleEditChip = (field: 'hiringRestrictions' | 'jobFamilies' | 'locations', value: string) => {
-    if (!editConfig) return;
-    setEditConfig((prev) => {
-      if (!prev) return prev;
-      const arr = prev[field];
-      return {
-        ...prev,
-        [field]: arr.includes(value)
-          ? arr.filter((v) => v !== value)
-          : [...arr, value],
-      };
-    });
-  };
-
-  // Toggle chips in edit dialog
-  const toggleEditDialogChip = (field: 'hiringRestrictions' | 'jobFamilies' | 'locations', value: string) => {
-    if (!editDialog) return;
-    setEditDialog((prev) => {
-      if (!prev) return prev;
-      const arr = prev[field];
-      return {
-        ...prev,
-        [field]: arr.includes(value)
-          ? arr.filter((v) => v !== value)
-          : [...arr, value],
-      };
-    });
-  };
-
-  // Add model handler
-  const handleCreateModelSubmit = () => {
-    if (!createModelForm.name || !createModelForm.organization) return;
-    setStaffingModels((prev) => [
-      ...prev,
-      {
-        id: (prev.length + 1).toString(),
-        name: createModelForm.name,
-        type: createModelForm.type as any,
-        organization: createModelForm.organization,
-        description: createModelForm.description,
-        status: 'Active',
-        positions: 0,
-        filledPositions: 0,
-        hiringRestrictions: createModelForm.hiringRestrictions,
-        jobFamilies: createModelForm.jobFamilies,
-        locations: createModelForm.locations,
-      },
-    ]);
-    setOpenCreateDialog(false);
-    setCreateModelForm({
-      name: '',
-      type: modelTypes[0],
-      organization: '',
-      description: '',
-      hiringRestrictions: [],
-      jobFamilies: [],
-      locations: [],
     });
   };
 
