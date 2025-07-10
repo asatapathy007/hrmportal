@@ -21,14 +21,13 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
-    // Simple demo login - no external dependencies
-    if (email === 'demo@picarro.com' && password === 'demo123') {
-      // Simulate API call delay
+
+    // Demo login: case-insensitive email, exact password
+    if (email.trim().toLowerCase() === 'demo@picarro.com' && password === 'demo123') {
       setTimeout(() => {
         onLogin && onLogin();
         setLoading(false);
-      }, 1000);
+      }, 500);
     } else {
       setError('Invalid credentials. Use demo@picarro.com / demo123');
       setLoading(false);
@@ -61,7 +60,6 @@ export default function Login({ onLogin }) {
           <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
             HRM Portal Login
           </Typography>
-          
           <Box component="form" onSubmit={handleLogin} sx={{ mt: 1, width: '100%' }}>
             <TextField
               margin="normal"
@@ -98,13 +96,11 @@ export default function Login({ onLogin }) {
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </Button>
-            
             {error && (
               <Alert severity="error" sx={{ mt: 2 }}>
                 {error}
               </Alert>
             )}
-            
             <Alert severity="info" sx={{ mt: 2 }}>
               <Typography variant="body2">
                 <strong>Demo Credentials:</strong><br />
