@@ -90,7 +90,7 @@ interface PositionFormData {
   compensationGradeId: string;
 }
 
-const API_BASE_URL = 'http://localhost:3001/api';
+import { API_BASE_URL } from '../../config/api';
 
 const JobsPositions: React.FC = () => {
   const [positions, setPositions] = useState<Position[]>([]);

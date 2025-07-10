@@ -7,7 +7,12 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-app-name.vercel.app', 'https://hrmportal.vercel.app'] 
+    : ['http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Health check endpoint
