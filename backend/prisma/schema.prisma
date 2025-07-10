@@ -1,0 +1,871 @@
+// Workday HCM Complete Prisma Schema
+// This schema covers all major Workday HCM functionalities
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ================================
+// CORE ORGANIZATIONAL STRUCTURE
+// ================================
+
+model Organization {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Company, Division, Department, etc.
+  code                  String                 @unique
+  description           String?
+  parentId              String?
+  parent                Organization?          @relation("OrganizationHierarchy", fields: [parentId], references: [id])
+  children              Organization[]         @relation("OrganizationHierarchy")
+  manager               Employee?              @relation("OrganizationManager", fields: [managerId], references: [id])
+  managerId             String?
+  costCenter            String?
+  location              Location?              @relation(fields: [locationId], references: [id])
+  locationId            String?
+  isActive              Boolean                @default(true)
+  effectiveDate         DateTime               @default(now())
+  expirationDate        DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  employees             Employee[]
+  positions             Position[]
+  budgets               Budget[]
+  
+  @@map("organizations")
+}
+
+model Location {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Headquarters, Branch, Remote, etc.
+  address1              String
+  address2              String?
+  city                  String
+  state                 String
+  country               String
+  postalCode            String
+  timeZone              String
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  organizations         Organization[]
+  employees             Employee[]
+  
+  @@map("locations")
+}
+
+// ================================
+// EMPLOYEE MANAGEMENT
+// ================================
+
+model Employee {
+  id                    String                 @id @default(cuid())
+  workerId              String                 @unique // Workday Worker ID
+  firstName             String
+  lastName              String
+  middleName            String?
+  preferredName         String?
+  email                 String                 @unique
+  workEmail             String?
+  personalEmail         String?
+  phone                 String?
+  workPhone             String?
+  emergencyContact      String?
+  emergencyPhone        String?
+  dateOfBirth           DateTime?
+  gender                String?
+  ethnicity             String?
+  maritalStatus         String?
+  
+  // Employment Details
+  hireDate              DateTime
+  terminationDate       DateTime?
+  rehireDate            DateTime?
+  originalHireDate      DateTime?
+  employmentType        String                 // Full-time, Part-time, Contract, etc.
+  workerType            String                 // Employee, Contingent Worker
+  employmentStatus      String                 // Active, Terminated, Leave of Absence, etc.
+  
+  // Position and Reporting
+  position              Position?              @relation(fields: [positionId], references: [id])
+  positionId            String?
+  jobProfile            JobProfile?            @relation(fields: [jobProfileId], references: [id])
+  jobProfileId          String?
+  organization          Organization?          @relation(fields: [organizationId], references: [id])
+  organizationId        String?
+  location              Location?              @relation(fields: [locationId], references: [id])
+  locationId            String?
+  
+  // Manager/Supervisor Relationships
+  manager               Employee?              @relation("EmployeeManager", fields: [managerId], references: [id])
+  managerId             String?
+  directReports         Employee[]             @relation("EmployeeManager")
+  
+  // Compensation
+  compensationGrade     CompensationGrade?     @relation(fields: [compensationGradeId], references: [id])
+  compensationGradeId   String?
+  
+  // Time Tracking
+  timeTrackingType      String?                // Exempt, Non-exempt
+  standardHours         Float?                 // Standard hours per week
+  
+  // System fields
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  // Relations
+  payrolls              Payroll[]
+  compensationChanges   CompensationChange[]
+  performanceReviews    PerformanceReview[]
+  goals                 Goal[]
+  learningEnrollments   LearningEnrollment[]
+  timeEntries           TimeEntry[]
+  leaveRequests         LeaveRequest[]
+  benefitEnrollments    BenefitEnrollment[]
+  talentProfile         TalentProfile?
+  emergencyContacts     EmergencyContact[]
+  addresses             Address[]
+  managedOrganizations  Organization[]         @relation("OrganizationManager")
+  
+  // Approval workflow relations
+  initiatedApprovals    ApprovalProcess[]      @relation("ApprovalInitiator")
+  pendingApprovals      ApprovalStep[]         @relation("ApprovalAssignee")
+  approvedBy            ApprovalStep[]         @relation("ApprovalApprover")
+  
+  @@map("employees")
+}
+
+model EmergencyContact {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  name                  String
+  relationship          String
+  phone                 String
+  email                 String?
+  address               String?
+  isPrimary             Boolean                @default(false)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("emergency_contacts")
+}
+
+model Address {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  type                  String                 // Home, Work, Mailing
+  address1              String
+  address2              String?
+  city                  String
+  state                 String
+  country               String
+  postalCode            String
+  isPrimary             Boolean                @default(false)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("addresses")
+}
+
+// ================================
+// JOBS, POSITIONS, AND ROLES
+// ================================
+
+model JobFamily {
+  id                    String                 @id @default(cuid())
+  name                  String
+  description           String?
+  isActive              Boolean                @default(true)
+  jobProfiles           JobProfile[]
+  
+  @@map("job_families")
+}
+
+model JobProfile {
+  id                    String                 @id @default(cuid())
+  name                  String
+  description           String?
+  jobFamily             JobFamily              @relation(fields: [jobFamilyId], references: [id])
+  jobFamilyId           String
+  jobLevel              String?
+  responsibilities      String?
+  qualifications        String?
+  skills                String?
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  employees             Employee[]
+  positions             Position[]
+  compensationGrades    CompensationGrade[]
+  
+  @@map("job_profiles")
+}
+
+model Position {
+  id                    String                 @id @default(cuid())
+  positionId            String                 @unique // Workday Position ID
+  title                 String
+  jobProfile            JobProfile             @relation(fields: [jobProfileId], references: [id])
+  jobProfileId          String
+  organization          Organization           @relation(fields: [organizationId], references: [id])
+  organizationId        String
+  supervisoryOrg        String?
+  isManager             Boolean                @default(false)
+  headcount             Int                    @default(1)
+  isActive              Boolean                @default(true)
+  availabilityDate      DateTime?
+  
+  // Position details
+  employmentType        String                 // Full-time, Part-time, Contract
+  positionType          String                 // Regular, Temporary, Internship
+  businessTitle         String?
+  
+  // Time tracking
+  timeType              String?                // Exempt, Non-exempt
+  standardHours         Float?
+  
+  // Compensation
+  compensationGrade     CompensationGrade?     @relation(fields: [compensationGradeId], references: [id])
+  compensationGradeId   String?
+  
+  // Dates
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  // Relations
+  employees             Employee[]
+  
+  @@map("positions")
+}
+
+// ================================
+// COMPENSATION MANAGEMENT
+// ================================
+
+model CompensationGrade {
+  id                    String                 @id @default(cuid())
+  name                  String
+  description           String?
+  currency              String                 @default("USD")
+  
+  // Salary ranges
+  minSalary             Float?
+  midSalary             Float?
+  maxSalary             Float?
+  
+  // Hourly ranges
+  minHourly             Float?
+  midHourly             Float?
+  maxHourly             Float?
+  
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  jobProfiles           JobProfile[]
+  positions             Position[]
+  employees             Employee[]
+  compensationPlans     CompensationPlan[]
+  
+  @@map("compensation_grades")
+}
+
+model CompensationPlan {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Base Pay, Bonus, Stock, etc.
+  description           String?
+  compensationGrade     CompensationGrade      @relation(fields: [compensationGradeId], references: [id])
+  compensationGradeId   String
+  currency              String                 @default("USD")
+  frequency             String                 // Monthly, Biweekly, Annual
+  
+  // Calculation rules
+  calculationMethod     String?                // Fixed, Percentage, Performance-based
+  baseAmount            Float?
+  percentageOfBase      Float?
+  
+  isActive              Boolean                @default(true)
+  effectiveDate         DateTime               @default(now())
+  expirationDate        DateTime?
+  
+  compensationChanges   CompensationChange[]
+  
+  @@map("compensation_plans")
+}
+
+model CompensationChange {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  compensationPlan      CompensationPlan       @relation(fields: [compensationPlanId], references: [id])
+  compensationPlanId    String
+  
+  changeType            String                 // Promotion, Merit, Market Adjustment, etc.
+  reason                String?
+  
+  // Previous values
+  previousAmount        Float?
+  previousCurrency      String?
+  
+  // New values
+  newAmount             Float
+  newCurrency           String                 @default("USD")
+  
+  effectiveDate         DateTime
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("compensation_changes")
+}
+
+// ================================
+// PAYROLL MANAGEMENT
+// ================================
+
+model Payroll {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  
+  payPeriod             String                 // 2024-01, 2024-02, etc.
+  payDate               DateTime
+  
+  // Earnings
+  regularHours          Float?
+  overtimeHours         Float?
+  ptoHours              Float?
+  regularPay            Float
+  overtimePay           Float?
+  bonusPay              Float?
+  commissionPay         Float?
+  otherEarnings         Float?
+  grossPay              Float
+  
+  // Deductions
+  federalTax            Float?
+  stateTax              Float?
+  socialSecurityTax     Float?
+  medicareTax           Float?
+  healthInsurance       Float?
+  dentalInsurance       Float?
+  visionInsurance       Float?
+  retirement401k        Float?
+  otherDeductions       Float?
+  totalDeductions       Float
+  
+  // Net pay
+  netPay                Float
+  
+  // Status
+  status                String                 // Draft, Approved, Paid, Cancelled
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("payrolls")
+}
+
+// ================================
+// PERFORMANCE MANAGEMENT
+// ================================
+
+model PerformanceReview {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  
+  reviewType            String                 // Annual, Mid-year, Project-based
+  reviewPeriod          String                 // 2024, Q1-2024, etc.
+  
+  // Ratings
+  overallRating         Float?
+  performanceRating     Float?
+  potentialRating       Float?
+  
+  // Reviews
+  selfReview            String?
+  managerReview         String?
+  peerReview            String?
+  
+  // Goals and development
+  goalsAchieved         String?
+  areasForImprovement   String?
+  developmentPlan       String?
+  
+  // Status and dates
+  status                String                 // Draft, In Progress, Completed, Approved
+  dueDate               DateTime
+  completedDate         DateTime?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("performance_reviews")
+}
+
+model Goal {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  
+  title                 String
+  description           String?
+  category              String?                // Performance, Development, Project
+  priority              String?                // High, Medium, Low
+  
+  // Progress tracking
+  status                String                 // Not Started, In Progress, Completed, Cancelled
+  progress              Float?                 // 0-100
+  
+  // Dates
+  startDate             DateTime
+  dueDate               DateTime
+  completedDate         DateTime?
+  
+  // Measurement
+  successCriteria       String?
+  measurementMethod     String?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("goals")
+}
+
+// ================================
+// LEARNING AND DEVELOPMENT
+// ================================
+
+model LearningCourse {
+  id                    String                 @id @default(cuid())
+  title                 String
+  description           String?
+  type                  String                 // Online, Instructor-led, Self-paced
+  category              String?                // Compliance, Leadership, Technical
+  duration              Int?                   // Duration in minutes
+  provider              String?
+  
+  // Requirements
+  isRequired            Boolean                @default(false)
+  prerequisite          String?
+  
+  // Status
+  isActive              Boolean                @default(true)
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  enrollments           LearningEnrollment[]
+  
+  @@map("learning_courses")
+}
+
+model LearningEnrollment {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  course                LearningCourse         @relation(fields: [courseId], references: [id])
+  courseId              String
+  
+  status                String                 // Enrolled, In Progress, Completed, Cancelled
+  progress              Float?                 // 0-100
+  
+  // Dates
+  enrollmentDate        DateTime               @default(now())
+  startDate             DateTime?
+  completionDate        DateTime?
+  dueDate               DateTime?
+  
+  // Results
+  score                 Float?
+  passingScore          Float?
+  isPassed              Boolean?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@unique([employeeId, courseId])
+  @@map("learning_enrollments")
+}
+
+// ================================
+// TIME TRACKING AND ABSENCE
+// ================================
+
+model TimeEntry {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  
+  date                  DateTime
+  timeType              String                 // Regular, Overtime, Holiday, etc.
+  hours                 Float
+  
+  // Project/task tracking
+  project               String?
+  task                  String?
+  description           String?
+  
+  // Approval
+  status                String                 // Submitted, Approved, Rejected
+  approvedBy            String?
+  approvedDate          DateTime?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("time_entries")
+}
+
+model LeaveType {
+  id                    String                 @id @default(cuid())
+  name                  String                 // PTO, Sick, Personal, Maternity, etc.
+  description           String?
+  category              String?                // Paid, Unpaid
+  
+  // Accrual rules
+  accrualRate           Float?                 // Hours per month/year
+  maxAccrual            Float?                 // Maximum hours that can be accrued
+  carryOverLimit        Float?                 // Hours that can be carried over
+  
+  // Rules
+  minimumIncrement      Float?                 // Minimum hours that can be requested
+  advanceNotice         Int?                   // Days of advance notice required
+  
+  isActive              Boolean                @default(true)
+  
+  leaveRequests         LeaveRequest[]
+  
+  @@map("leave_types")
+}
+
+model LeaveRequest {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  leaveType             LeaveType              @relation(fields: [leaveTypeId], references: [id])
+  leaveTypeId           String
+  
+  startDate             DateTime
+  endDate               DateTime
+  hours                 Float
+  reason                String?
+  
+  // Status
+  status                String                 // Pending, Approved, Denied, Cancelled
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("leave_requests")
+}
+
+// ================================
+// BENEFITS ADMINISTRATION
+// ================================
+
+model BenefitPlan {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Health, Dental, Vision, Retirement, etc.
+  description           String?
+  provider              String?
+  
+  // Coverage details
+  coverage              String?                // Single, Family, etc.
+  
+  // Costs
+  employeeCost          Float?
+  employerCost          Float?
+  
+  // Eligibility
+  eligibilityRules      String?
+  
+  // Enrollment periods
+  openEnrollmentStart   DateTime?
+  openEnrollmentEnd     DateTime?
+  
+  isActive              Boolean                @default(true)
+  
+  enrollments           BenefitEnrollment[]
+  
+  @@map("benefit_plans")
+}
+
+model BenefitEnrollment {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String
+  benefitPlan           BenefitPlan            @relation(fields: [benefitPlanId], references: [id])
+  benefitPlanId         String
+  
+  // Coverage details
+  coverage              String?                // Single, Family, etc.
+  
+  // Dates
+  enrollmentDate        DateTime               @default(now())
+  effectiveDate         DateTime
+  terminationDate       DateTime?
+  
+  // Status
+  status                String                 // Active, Terminated, Pending
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@unique([employeeId, benefitPlanId])
+  @@map("benefit_enrollments")
+}
+
+// ================================
+// TALENT MANAGEMENT
+// ================================
+
+model TalentProfile {
+  id                    String                 @id @default(cuid())
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  employeeId            String                 @unique
+  
+  // Skills and competencies
+  skills                String?                // JSON or comma-separated
+  competencies          String?
+  certifications        String?
+  
+  // Career aspirations
+  careerGoals           String?
+  preferredNextRole     String?
+  developmentAreas      String?
+  
+  // Performance and potential
+  performanceRating     Float?
+  potentialRating       Float?
+  
+  // Mobility
+  relocateWilling       Boolean                @default(false)
+  travelWilling         Boolean                @default(false)
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("talent_profiles")
+}
+
+// ================================
+// SECURITY AND ACCESS MANAGEMENT
+// ================================
+
+model SecurityRole {
+  id                    String                 @id @default(cuid())
+  name                  String                 @unique
+  description           String?
+  type                  String                 // System, Business Process, Domain
+  
+  // Permissions
+  permissions           String                 // JSON array of permissions
+  
+  isActive              Boolean                @default(true)
+  
+  userRoles             UserRole[]
+  
+  @@map("security_roles")
+}
+
+model UserRole {
+  id                    String                 @id @default(cuid())
+  employeeId            String
+  roleId                String
+  
+  securityRole          SecurityRole           @relation(fields: [roleId], references: [id])
+  
+  // Assignment details
+  assignedBy            String?
+  assignedDate          DateTime               @default(now())
+  expirationDate        DateTime?
+  
+  // Status
+  isActive              Boolean                @default(true)
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@unique([employeeId, roleId])
+  @@map("user_roles")
+}
+
+// ================================
+// WORKFLOW AND APPROVALS
+// ================================
+
+model ApprovalProcess {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Hire, Termination, Compensation Change, etc.
+  description           String?
+  
+  // Process details
+  initiator             Employee               @relation("ApprovalInitiator", fields: [initiatorId], references: [id])
+  initiatorId           String
+  
+  // Status
+  status                String                 // Draft, In Progress, Approved, Rejected, Cancelled
+  
+  // Dates
+  startDate             DateTime               @default(now())
+  dueDate               DateTime?
+  completedDate         DateTime?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  steps                 ApprovalStep[]
+  
+  @@map("approval_processes")
+}
+
+model ApprovalStep {
+  id                    String                 @id @default(cuid())
+  process               ApprovalProcess        @relation(fields: [processId], references: [id])
+  processId             String
+  
+  stepNumber            Int
+  name                  String
+  description           String?
+  
+  // Assignee
+  assignee              Employee               @relation("ApprovalAssignee", fields: [assigneeId], references: [id])
+  assigneeId            String
+  
+  // Status
+  status                String                 // Pending, Approved, Rejected, Skipped
+  
+  // Action details
+  action                String?                // Approve, Reject, Send Back
+  comments              String?
+  actionDate            DateTime?
+  approver              Employee?              @relation("ApprovalApprover", fields: [approverId], references: [id])
+  approverId            String?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("approval_steps")
+}
+
+// ================================
+// BUDGET AND FINANCIAL MANAGEMENT
+// ================================
+
+model Budget {
+  id                    String                 @id @default(cuid())
+  organization          Organization           @relation(fields: [organizationId], references: [id])
+  organizationId        String
+  
+  name                  String
+  type                  String                 // Annual, Quarterly, Project
+  fiscalYear            String
+  
+  // Budget amounts
+  totalBudget           Float
+  allocatedBudget       Float
+  spentBudget           Float
+  remainingBudget       Float
+  
+  // Categories
+  salaryBudget          Float?
+  benefitsBudget        Float?
+  trainingBudget        Float?
+  equipmentBudget       Float?
+  
+  // Status
+  status                String                 // Draft, Approved, Active, Closed
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("budgets")
+}
+
+// ================================
+// AUDIT AND COMPLIANCE
+// ================================
+
+model AuditLog {
+  id                    String                 @id @default(cuid())
+  entityType            String                 // Employee, Position, Organization, etc.
+  entityId              String
+  action                String                 // Create, Update, Delete
+  
+  // User information
+  userId                String
+  userEmail             String
+  
+  // Change details
+  oldValues             String?                // JSON
+  newValues             String?                // JSON
+  
+  // Request details
+  ipAddress             String?
+  userAgent             String?
+  
+  timestamp             DateTime               @default(now())
+  
+  @@map("audit_logs")
+}
+
+// ================================
+// SYSTEM CONFIGURATION
+// ================================
+
+model SystemConfiguration {
+  id                    String                 @id @default(cuid())
+  key                   String                 @unique
+  value                 String
+  description           String?
+  category              String?                // System, Security, Payroll, etc.
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("system_configurations")
+}
+
+// ================================
+// REPORTING AND ANALYTICS
+// ================================
+
+model Report {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  String                 // Standard, Custom, Scheduled
+  description           String?
+  
+  // Report definition
+  query                 String?                // SQL query or config
+  parameters            String?                // JSON parameters
+  
+  // Scheduling
+  isScheduled           Boolean                @default(false)
+  scheduleFrequency     String?                // Daily, Weekly, Monthly
+  lastRunDate           DateTime?
+  nextRunDate           DateTime?
+  
+  // Access
+  createdBy             String
+  isPublic              Boolean                @default(false)
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  @@map("reports")
+}
